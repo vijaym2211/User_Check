@@ -35,7 +35,8 @@ public class UserServices {
         dbuser.setEmail(email);
         dbuser.setName(name);
         dbuser.setPassword(bcryptPasswordEncoder.encode(password));
-        dbuser.setRoles(Arrays.asList("ROLE_USER"));
+//        dbuser.setRoles(Arrays.asList("ROLE_USER"));
+        dbuser.setRoles(Arrays.asList("USER"));
         userRepository.save(dbuser);
         return dbuser;
     }

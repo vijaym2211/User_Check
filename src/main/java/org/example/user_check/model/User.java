@@ -16,7 +16,7 @@ public class User {
     @Column(unique=true, nullable=false)
     private String email;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles;
 
     public List<String> getRoles() {
