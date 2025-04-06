@@ -2,6 +2,7 @@ package org.example.user_check.contoller;
 
 
 import org.example.user_check.Exception.UserAlreadyPresent;
+import org.example.user_check.Exception.UserNotPresent;
 import org.example.user_check.dto.UserRequestDto;
 import org.example.user_check.dto.UserResponseDto;
 import org.example.user_check.model.User;
@@ -68,11 +69,12 @@ public class UserController {
 //    @GetMapping("/updateUser")
 //    public ResponseEntity<?> updateUser(){
     @PutMapping("/updateUser")
-    public ResponseEntity<?> updateUser(@RequestBody UserRequestDto userRequestDto) throws UserAlreadyPresent {
+    public ResponseEntity<?> updateUser(@RequestBody UserRequestDto userRequestDto) throws UserAlreadyPresent, UserNotPresent {
         System.out.println("initate the update process***************************");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        User user = userServices.updateUser(email);
+        User user = userServices.updateUser(email, userRequestDto.getName(),
+                userRequestDto.getEmail(), userRequestDto.getPassword());
 
         UserResponseDto userResponseDto = new UserResponseDto();
         userResponseDto.setName(user.getName());

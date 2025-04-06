@@ -2,6 +2,7 @@ package org.example.user_check.services;
 
 
 import org.example.user_check.Exception.UserAlreadyPresent;
+import org.example.user_check.Exception.UserNotPresent;
 import org.example.user_check.model.User;
 import org.example.user_check.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,12 +51,15 @@ public class UserServices {
         return userRepository.findAll();
     }
 
-    public User updateUser(String email) throws UserAlreadyPresent {
+    public User updateUser(String email, String name, String newEmail, String password) throws UserNotPresent {
         Optional<User> dbuser = userRepository.findByEmail(email);
-        User user = new User();
-        user.setEmail(email);
-        user.setName(dbuser.get().getName());
-        user.setPassword(dbuser.get().getPassword());
+        if(dbuser.isEmpty()){
+            throw new UserNotPresent("User not present");
+        }
+        User user = dbuser.get();
+        user.setEmail(newEmail);
+        user.setName(name);
+        user.setPassword(bcryptPasswordEncoder.encode(password));
         return userRepository.save(user);
     }
 }
