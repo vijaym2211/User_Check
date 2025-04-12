@@ -51,15 +51,15 @@ public class UserServices {
         return userRepository.findAll();
     }
 
-    public User updateUser(String email, String name, String newEmail, String password) throws UserNotPresent {
-        Optional<User> dbuser = userRepository.findByEmail(email);
+    public User updateUser(String currentEmail, String name, String newEmail, String password) throws UserNotPresent {
+        Optional<User> dbuser = userRepository.findByEmail(currentEmail);
         if(dbuser.isEmpty()){
             throw new UserNotPresent("User not present");
         }
         User user = dbuser.get();
-        user.setEmail(newEmail);
-        user.setName(name);
-        user.setPassword(bcryptPasswordEncoder.encode(password));
-        return userRepository.save(user);
+        dbuser.get().setEmail(newEmail);
+        dbuser.get().setName(name);
+        dbuser.get().setPassword(bcryptPasswordEncoder.encode(password));
+        return userRepository.save(dbuser.get());
     }
 }

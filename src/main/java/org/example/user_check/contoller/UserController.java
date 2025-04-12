@@ -4,6 +4,8 @@ package org.example.user_check.contoller;
 import lombok.extern.slf4j.Slf4j;
 import org.example.user_check.Exception.UserAlreadyPresent;
 import org.example.user_check.Exception.UserNotPresent;
+import org.example.user_check.dto.UpdateUserRequestDto;
+import org.example.user_check.dto.UpdateUserResponseDto;
 import org.example.user_check.dto.UserRequestDto;
 import org.example.user_check.dto.UserResponseDto;
 import org.example.user_check.model.User;
@@ -103,17 +105,18 @@ public class UserController {
 //    @GetMapping("/updateUser")
 //    public ResponseEntity<?> updateUser(){
     @PutMapping("/updateUser")
-    public ResponseEntity<?> updateUser(@RequestBody UserRequestDto userRequestDto) throws UserAlreadyPresent, UserNotPresent {
+    public ResponseEntity<?> updateUser(@RequestBody UpdateUserRequestDto userRequestDto) throws UserAlreadyPresent, UserNotPresent {
         System.out.println("initate the update process***************************");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        User user = userServices.updateUser(email, userRequestDto.getName(),
-                userRequestDto.getEmail(), userRequestDto.getPassword());
+        User user = userServices.updateUser(userRequestDto.getCurrentEmail(), userRequestDto.getName(),
+                userRequestDto.getNewEmail(), userRequestDto.getPassword());
 
-        UserResponseDto userResponseDto = new UserResponseDto();
-        userResponseDto.setName(user.getName());
-        userResponseDto.setEmail(user.getEmail());
+        UpdateUserResponseDto updateUserResponseDto = new UpdateUserResponseDto();
+        updateUserResponseDto.setName(user.getName());
+//        updateUserResponseDto.setPassword(user.getPassword());
+        updateUserResponseDto.setEmail(user.getEmail());
 //        return ResponseEntity.ok("SUCECC ********************************************");
-        return ResponseEntity.ok(userResponseDto);
+        return ResponseEntity.ok(updateUserResponseDto);
     }
 }
